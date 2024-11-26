@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const productRoute = require('./routes/productRoute')
+const errorMiddleware = require('./middleware/errorMiddleware')
+
 const app = express()
 
 const MONGO_URL = process.env.MONGO_URL
@@ -12,10 +14,13 @@ app.use(express.urlencoded({extended: false}))
 
 // routes
 app.get('/',(req, res) => {
+    // throw new Error('fake error')
     res.send('Hello Node API')
 })
 
 app.use('/api/products', productRoute)
+
+app.use(errorMiddleware)
 
 // connect database
 mongoose.set("strictQuery", false)
